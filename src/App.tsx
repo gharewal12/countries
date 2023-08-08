@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
+import Home from './pages/Home';
 import './App.css';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+
 // MUI
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -18,31 +20,16 @@ import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import SearchIcon from '@mui/icons-material/Search';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
 
 // Styles
 import { theme } from './theme/MainTheme';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import Paper from '@mui/material/Paper';
-import Card from '@mui/material/Card';
+import { GET_COUNTRIES } from './queries/getCountries';
 
-const GET_COUNTRIES = gql`
-  query {
-    countries {
-      name 
-      capital
-      population
-      region
-      flags {
-        alt
-        png
-        svg
-      }
-    }
-  }
-`;
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("dark");
@@ -88,7 +75,14 @@ function App() {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return <Backdrop
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={loading}
+    >
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  }
   if (error) return <p>Error: {error.message}</p>;
 
 
@@ -103,11 +97,11 @@ function App() {
               <IconButton onClick={colorMode.toggleColorMode} color="inherit">
                 {mode === "dark" && <DarkModeIcon />}
                 {mode === "light" && <DarkModeOutlinedIcon />}
-              </IconButton><Typography variant="caption" fontWeight={400} sx={{ display: 'flex', alignItems: 'center', fontSize: '1.1rem' }}> Dark Mode</Typography></Grid>
+              </IconButton><Typography variant="caption" fontWeight={300} sx={{ display: 'flex', alignItems: 'center', fontSize: '1rem' }}> Dark Mode</Typography></Grid>
           </Grid></Toolbar>
       </AppBar>
       <Toolbar />
-      <Grid container pl={6} pr={6} pt={2}>
+      <Grid container pl={6} pr={6} pt={4}>
         <Grid item xs>
           <Autocomplete
             freeSolo
@@ -121,25 +115,26 @@ function App() {
                 InputProps={{
                   ...params.InputProps,
                   type: 'search',
-                  startAdornment: (< InputAdornment position="start" > <SearchIcon /> </InputAdornment>),
+                  startAdornment: (< InputAdornment position="start" sx={{ marginLeft: 2 }}> <SearchIcon /> </InputAdornment>),
                   placeholder: "Search for a country..."
                 }}
-                sx={{ maxWidth: "30%" }}
+                sx={{ maxWidth: "40%" }}
               />
             )}
           />
         </Grid>
         <Grid item>
-          <Paper sx={{ backgroundColor: `${theme(mode).palette.secondary}` }}>
+          <Paper>
             <Box sx={{ minWidth: 200 }}>
               <FormControl fullWidth>
-                {regionFilter === "" && <InputLabel shrink={false} id="demo-simple-select-label">Filter by Region</InputLabel>}
+                {regionFilter === "" && <InputLabel shrink={false} id="demo-simple-select-label" sx={{ paddingLeft: '0.5rem'}}>Filter by Region</InputLabel>}
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Filter by Region"
                   value={regionFilter}
                   onChange={handleFilterChange}
+
                 >
                   <MenuItem value={"Africa"}>Africa</MenuItem>
                   <MenuItem value={"America"}>America</MenuItem>
@@ -152,33 +147,7 @@ function App() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Grid container justifyContent="flex-start" spacing={6} mt={2}>
-            {countriesData.map((c: any) => (
-              <Grid item xs={3} md={3} lg={3}>
-                <Card variant="outlined" sx={{ height: 430 }}>
-                  <CardMedia
-                    sx={{ height: 240, backgroundCover: 'cover' }}
-                    image={c.flags.png}
-                    title={c.flags.alt}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" fontWeight={600} component="div">
-                      {c.name}
-                    </Typography>
-                    <Typography gutterBottom variant="body1" fontWeight={600} component="div">
-                      Population: <Typography gutterBottom variant="body1" component="span">{c.population}</Typography>
-                    </Typography>
-                    <Typography gutterBottom variant="body1" fontWeight={600} component="div">
-                      Region: <Typography gutterBottom variant="body1" component="span">{c.region}</Typography>
-                    </Typography>
-                    <Typography gutterBottom variant="body1" fontWeight={600} component="div">
-                      Capital: <Typography gutterBottom variant="body1" component="span">{c.capital}</Typography>
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+          <Home countriesData={countriesData} />
         </Grid>
       </Grid>
     </ThemeProvider>

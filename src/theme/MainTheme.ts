@@ -15,7 +15,7 @@ export const theme = (mode: any) => createTheme({
                     paper: 'hsl(0, 0%, 98%)',
                 },
                 text: {
-                    primary: 'hsl(235, 19%, 35%)',
+                    primary: 'hsl(200, 15%, 8%)',
                     secondary: 'rgba(0, 0, 0, 0.6)',
                     disabled: 'rgba(0, 0, 0, 0.38)',
                 },
@@ -31,11 +31,11 @@ export const theme = (mode: any) => createTheme({
                 // palette values for dark mode
                 divider: 'rgba(255, 255, 255, 0.12)',
                 background: {
-                    default: 'hsl(235, 21%, 11%)',
-                    paper: 'hsl(235, 21%, 11%)',
+                    default: 'hsl(207, 26%, 17%)',
+                    paper: 'hsl(207, 26%, 17%)',
                 },
                 text: {
-                    primary: 'hsl(234, 39%, 85%)',
+                    primary: 'hsl(0, 0%, 100%)',
                     secondary: 'rgba(255, 255, 255, 0.7)',
                     disabled: 'rgba(255, 255, 255, 0.5)',
                 },
@@ -49,15 +49,16 @@ export const theme = (mode: any) => createTheme({
             }),
     },
     typography: {
-        fontFamily: 'Josefin Sans, sans-serif',
-        fontWeightBold: 400
+        fontFamily: 'Nunito Sans',
+        fontWeightBold: 400,
+        fontSize: 14
     },
     components: {
         MuiTextField: {
             styleOverrides: {
                 root: {
                     ...getTextFieldStyle(mode),
-                    borderRadius: '0.5rem'
+                    borderRadius: '0.5rem',
                 }
             }
         },
@@ -80,29 +81,20 @@ export const theme = (mode: any) => createTheme({
                 }
             }
         },
-        MuiListItemIcon: {
+        MuiCard: {
             styleOverrides: {
                 root: {
-                    minWidth: '45px !important'
+                    ...getTextFieldStyle(mode),
+                    borderRadius: '0.5rem',
                 }
             }
         },
-        MuiButton: {
-            defaultProps: {
-                disableRipple: true
-            },
+        MuiPopover: {
             styleOverrides: {
-                root: {
-                    textTransform: 'none',
-                    color: ' hsl(234, 11%, 52%)',
-                    backgroundColor: 'transparent',
-                    fontWeight: 700,
-                    '&:hover': {
-                        // Define the CSS properties for hover state
-                        backgroundColor: 'transparent !important',
-                        color: mode === 'light' ? 'hsl(235, 24%, 19%)' : 'hsl(0, 0%, 98%)',
-                    },
-                },
+
+                paper: {
+                    marginTop: '5px'
+                }
             }
         }
     }
@@ -112,11 +104,12 @@ const getTextFieldStyle = (mode: string) => {
     if (mode === 'light') {
         return {
             background: 'hsl(0, 0%, 100%)',
+            boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'
         };
     }
     else {
         return {
-            background: 'hsl(237, 14%, 26%)',
+            background: 'hsl(209, 23%, 22%)',
         };
     }
 };

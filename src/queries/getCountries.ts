@@ -7,6 +7,12 @@ query {
     capital
     population
     region
+    subRegion
+    currencies
+    languages
+    borders
+    nativeName
+    tld 
     flags {
       alt
       png

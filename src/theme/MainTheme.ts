@@ -28,6 +28,9 @@ export const theme = (mode: any) => createTheme({
                 },
             }
             : {
+                primary: {
+                    main: 'hsl(0, 0%, 100%)',
+                },
                 // palette values for dark mode
                 divider: 'rgba(255, 255, 255, 0.12)',
                 background: {
@@ -51,7 +54,10 @@ export const theme = (mode: any) => createTheme({
     typography: {
         fontFamily: 'Nunito Sans',
         fontWeightBold: 400,
-        fontSize: 14
+        fontSize: 14,
+        body2: {
+            color: 'hsl(204.55deg 9.4% 54.12%)'
+        }
     },
     components: {
         MuiTextField: {
@@ -86,6 +92,14 @@ export const theme = (mode: any) => createTheme({
                 root: {
                     ...getTextFieldStyle(mode),
                     borderRadius: '0.5rem',
+                }
+            }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    ...getTextFieldStyle(mode),
+                    textTransform: "unset"
                 }
             }
         },
